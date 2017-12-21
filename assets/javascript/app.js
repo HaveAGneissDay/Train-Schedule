@@ -22,14 +22,21 @@ $("#currentTime").append(moment().format('MMMM Do YYYY, HH:mm'))
 
 var database = firebase.database();
 
-// database.ref().on("value", function(snapshot) {
-//
-//   addTrainName = snapshot.addTrainName.val();
-//   addDestination = snapshot.addDestination.val();
-//   addTrainTime = snapshot.addTrainTime.val();
-//   addFrequency = snapshot.addFrequency.val();
-//
-// })
+database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+
+  console.log(childSnapshot.val());
+
+  // Store everything into a variable.
+  var addTrainName = childSnapshot.val().name;
+  var addDestination = childSnapshot.val().destination;
+  var addTrainTime = childSnapshot.val().trainTime;
+  var addFrequency = childSnapshot.val().frequency;
+
+  $("#trainTable > tbody").append("<tr><td>" + addTrainName + "</td><td>" + addDestination + "</td><td>" +
+  addTrainTime + "</td><td>" + addFrequency + "</td></tr>");
+
+  })
+
 
 
 
@@ -42,10 +49,10 @@ $("#submit").on("click", function(){
   // Prevent form from submitting
   event.preventDefault();
 //this val etc
- var addTrainName = $("#addTrainName").val()
- var addDestination = $("#addDestination").val()
- var addTrainTime = $("#addTrainTime").val()
- var addFrequency = $("#addFrequency").val()
+ var addTrainName = $("#addTrainName").val();
+ var addDestination = $("#addDestination").val();
+ var addTrainTime = $("#addTrainTime").val();
+ var addFrequency = $("#addFrequency").val();
 console.log(addTrainName);
 console.log(addDestination);
 console.log(addTrainTime);
@@ -70,13 +77,5 @@ console.log(newTrain.trainTime);
 console.log(newTrain.frequency);
 
 
-database.ref().set({
-  addTrainName: addTrainName,
-  addDestination: addDestination,
-  addTrainTime: addTrainTime,
-  addFrequency: addFrequency
 });
-
-})
-
 });
